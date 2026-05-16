@@ -24,7 +24,7 @@
                 Drag any window into a cell, drag the divider to resize. Made for ultrawide and multi-display setups.
             </p>
             <div class="cta-row">
-                <a class="button primary" href="#pricing">Buy TileMana — $9.99</a>
+                <a class="button primary" href="#pricing" data-paddle-buy>Buy TileMana — $9.99</a>
                 <a class="button secondary" href="#pricing">Start 7-day free trial</a>
             </div>
         </section>
@@ -62,7 +62,7 @@
                     <li>Free updates for v1.x</li>
                     <li>14-day money-back guarantee</li>
                 </ul>
-                <a class="button primary" href="#" id="buy-button">Buy now</a>
+                <a class="button primary" href="#" id="buy-button" data-paddle-buy>Buy now</a>
                 <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--fg-muted);">
                     Payments processed by Paddle.com.
                 </p>
@@ -79,5 +79,31 @@
             <a href="mailto:yuto0235work@gmail.com">Contact</a>
         </nav>
     </footer>
+
+    <!-- Paddle Billing v2 — see https://developer.paddle.com/paddlejs/overview -->
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+    <script>
+        // ⚠️ When switching from Sandbox to Live:
+        //    1. Change PADDLE_ENVIRONMENT to "production"
+        //    2. Swap PADDLE_CLIENT_TOKEN for the Live client-side token
+        //    3. Swap PADDLE_PRICE_ID for the Live price ID
+        const PADDLE_ENVIRONMENT = "sandbox";
+        const PADDLE_CLIENT_TOKEN = "test_ebbf172563b0dac2ccec3b41031";
+        const PADDLE_PRICE_ID = "pri_01krq1jjs8jy8vnd9hxnq38p2j";
+
+        if (PADDLE_ENVIRONMENT === "sandbox") {
+            Paddle.Environment.set("sandbox");
+        }
+        Paddle.Initialize({ token: PADDLE_CLIENT_TOKEN });
+
+        document.querySelectorAll("[data-paddle-buy]").forEach((el) => {
+            el.addEventListener("click", (event) => {
+                event.preventDefault();
+                Paddle.Checkout.open({
+                    items: [{ priceId: PADDLE_PRICE_ID, quantity: 1 }]
+                });
+            });
+        });
+    </script>
 </body>
 </html>
